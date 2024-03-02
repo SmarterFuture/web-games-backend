@@ -1,10 +1,8 @@
 CREATE TABLE
-    public.users (
-        name CHARACTER VARYING(50)
+    IF NOT EXISTS public.auth (
+        "uname" VARCHAR(15) NOT NULL,
+        "password" VARCHAR(32) NOT NULL
     );
 
 
-INSERT INTO
-    public.users (name)
-VALUES
-    ('test 123');
+CREATE INDEX "idx_uname" ON public.auth USING HASH ("uname");
