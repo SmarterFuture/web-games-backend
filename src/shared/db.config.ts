@@ -1,4 +1,4 @@
-import * as schema from "../db";
+import * as schema from "../../db";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
 import "dotenv/config";
@@ -12,7 +12,7 @@ const pool = new Pool({
     user: process.env.PGUSER,
     password: process.env.PGPASSWORD,
     database: process.env.PGDATABASE
-}) 
+}); 
 
 export const db = drizzle(pool, { schema });
-export * as tables from "../db";
+export * as tables from "../../db";
