@@ -8,7 +8,8 @@ import http from "http";
 import https from "https";
 
 import { helloWorld, getUnames, echo } from "./functions/test";
-import { signUp } from "./functions/auth/signUp";
+import { signup } from "./functions/auth/signup";
+import { login } from "./functions/auth/login";
 
 const PORT = process.env.PORT || 9000;
 
@@ -19,7 +20,8 @@ app.use(express.json());
 app.get("/", helloWorld);
 app.get("/unames", getUnames);
 app.post("/echo", echo);
-app.post("/signUp", signUp);
+app.post("/signup", signup);
+app.post("/login", login);
 
 
 const httpServer = http.createServer(app);
