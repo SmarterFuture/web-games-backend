@@ -4,7 +4,8 @@
   "scripts": {
     "lint": "eslint src --ext .ts",
     "start": "tsc && node ./target/src/index.js",
-    "dbpush": "npx drizzle-kit generate:pg && npx drizzle-kit push:pg",
+    "dbpush": "drizzle-kit generate:pg && drizzle-kit push:pg",
+    "dbweb": "drizzle-kit studio",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
@@ -15,12 +16,14 @@
     "http": "^0.0.1-security",
     "https": "^1.0.0",
     "pg": "^8.11.3",
-    "superstruct": "^1.0.3"
+    "superstruct": "^1.0.3",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
     "@types/node": "^20.11.0",
     "@types/pg": "^8.11.2",
+    "@types/uuid": "^9.0.8",
     "@typescript-eslint/eslint-plugin": "^7.1.0",
     "drizzle-kit": "^0.20.14",
     "eslint": "^8.56.0",

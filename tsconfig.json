@@ -15,7 +15,8 @@
         "skipLibCheck": true,
     },
     "include": [
-        "src"
+        "src",
+        "db"
     ],
     "exclude": [
         "target"

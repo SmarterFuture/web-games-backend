@@ -2,12 +2,13 @@ import { Request, Response } from "express";
 import { db, tables } from "../../shared/db.config";
 import { Tlogin } from "../../shared/types/auth";
 import { eq, sql } from "drizzle-orm";
-import { validate } from "../shared";
+import { validateData } from "../shared";
+import {createKey} from "./keyAuth";
 
 
 export function signup (req: Request, res: Response) {
 
-    const body = validate(req.body, Tlogin);
+    const body = validateData(req.body, Tlogin);
     if ( !body.ok ) {
         res.status(400).json(body);
         return;
@@ -33,10 +34,17 @@ export function signup (req: Request, res: Response) {
                 .values({
                     uname: name,
                     password: password
-                });
+                })
+                .returning({ uuid: tables.auth.uuid });
         })
-        .then((_) => {
-            res.status(200).json({ msg: "User was signed in" });
+        .then(( dbuuid ) => {
+            return createKey(dbuuid[0].uuid);
+        })
+        .then((key) => {
+            res.status(200).json({
+                msg: "User was signed in",
+                key: key
+            });
         })
         .catch((err) => {
             if ( err === "done") { return; }

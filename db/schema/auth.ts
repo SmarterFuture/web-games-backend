@@ -9,6 +9,6 @@ export const auth = pgTable("auth", {
 }, ( table ) => {
     return {
         idx_uname: index("idx_uname").on(table.uname).using(sql`HASH ("uname")`)
-    }
-}
-);
+    };
+});
+
