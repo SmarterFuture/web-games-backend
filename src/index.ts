@@ -7,7 +7,7 @@ import fs from "fs";
 import http from "http";
 import https from "https";
 
-import { helloWorld, getUnames, echo } from "./functions/test";
+import { helloWorld, getUnames, echo, checkKey } from "./functions/test";
 import { signup } from "./functions/auth/signup";
 import { login } from "./functions/auth/login";
 
@@ -22,6 +22,7 @@ app.get("/unames", getUnames);
 app.post("/echo", echo);
 app.post("/signup", signup);
 app.post("/login", login);
+app.post("/checkKey", checkKey);
 
 
 const httpServer = http.createServer(app);

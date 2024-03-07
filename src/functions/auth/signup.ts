@@ -37,7 +37,7 @@ export function signup (req: Request, res: Response) {
                 })
                 .returning({ uuid: tables.auth.uuid });
         })
-        .then(( dbuuid ) => {
+        .then((dbuuid) => {
             return createKey(dbuuid[0].uuid);
         })
         .then((key) => {
