@@ -4,7 +4,8 @@
   "scripts": {
     "lint": "eslint src --ext .ts",
     "start": "tsc && node ./target/src/index.js",
-    "dbpush": "drizzle-kit generate:pg && drizzle-kit push:pg",
+    "dbgen": "drizzle-kit generate:pg",
+    "dbpush": "drizzle-kit push:pg",
     "dbweb": "drizzle-kit studio",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

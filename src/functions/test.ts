@@ -2,16 +2,16 @@ import { Request, Response } from "express";
 import { db, tables } from "../shared/db.config";
 import { object, string } from "superstruct";
 import { validateData } from "./shared";
-import { validKey } from "./auth/keyAuth";
+import { validToken } from "./auth/token";
 
 
-const Tkey = object({
-    key: string()
+const Ttoken = object({
+    token: string()
 });
 
 
 export function getUnames (_: Request, res: Response) {
-    db.select().from(tables.auth)
+    db.select().from(tables.users)
         .then((val) => { res.status(200).json(val); })
         .catch((err) => { res.status(404).json(err); });
 }
@@ -25,15 +25,15 @@ export function echo (req: Request, res: Response) {
 }
 
 export function checkKey (req: Request, res: Response) {
-    const body = validateData(req.body, Tkey);
+    const body = validateData(req.body, Ttoken);
     if ( !body.ok ) {
         res.status(400).json({ err: body.error });
         return;
     }
 
-    const key = body.data.key;
+    const token = body.data.token;
 
-    return validKey(key)
+    return validToken(token)
         .then((val) => {
             res.status(200).json({ valid: val});
         })

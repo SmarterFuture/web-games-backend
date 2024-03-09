@@ -1,2 +1,2 @@
-export { auth } from "./schema/auth";
-export { cert } from "./schema/cert";
+export { users } from "./schema/users";
+export { userToken } from "./schema/userToken";

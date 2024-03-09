@@ -1,53 +1,47 @@
 import { Request, Response } from "express";
 import { db, tables } from "../../shared/db.config";
-import { Tlogin } from "../../shared/types/auth";
-import { eq, sql } from "drizzle-orm";
+import { Tsignup } from "./shared";
+import { SQL, sql } from "drizzle-orm";
 import { validateData } from "../shared";
-import {createKey} from "./keyAuth";
+import { createToken } from "./token";
 
 
 export function signup (req: Request, res: Response) {
+    const cwt = tables.users;
 
-    const body = validateData(req.body, Tlogin);
+    const body = validateData(req.body, Tsignup);
     if ( !body.ok ) {
         res.status(400).json(body);
         return;
     }
     
+    const handle: string = body.data.handle;
     const name: string = body.data.name;
-    const password: string = body.data.password;
-    
-    db.select({
-            field: sql`count(1) > 0`
+    const password: SQL = sql.raw(`crypt('${body.data.password}', gen_salt('bf'))`);
+
+    db.insert(tables.users)
+        .values({
+            handle: handle,
+            name: name,
+            password: password
         })
-        .from(tables.auth)
-        .where(eq(tables.auth.uname, name))
-        .then((val) => {
-            return val[0].field;
-        })
-        .then((exists) => {
-            if ( exists ) {
+        .onConflictDoNothing()
+        .returning({ uid: cwt.uid })
+        .then((uids) => {
+            if ( uids.length === 0) {
                 res.status(400).json({ err: "User already exists" });
                 return Promise.reject("done");
             }
-            return db.insert(tables.auth)
-                .values({
-                    uname: name,
-                    password: password
-                })
-                .returning({ uuid: tables.auth.uuid });
+            return createToken(uids[0].uid);
         })
-        .then((dbuuid) => {
-            return createKey(dbuuid[0].uuid);
-        })
-        .then((key) => {
+        .then((token) => {
             res.status(200).json({
                 msg: "User was signed in",
-                key: key
+                token: token
             });
         })
         .catch((err) => {
-            if ( err === "done") { return; }
+            if ( err === "done" ) { return; }
             res.status(500).json(err);
         });
 }
